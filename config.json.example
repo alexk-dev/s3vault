@@ -1,0 +1,8 @@
+{
+  "salt": "hgz3cBMo7^8#ZDb&G0A7J^C1#in%rN5a",
+  "password": "StronG_passw0rd",
+  "s3.bucket_id": "...",
+  "s3.access_id": "...",
+  "s3.access_key": "...",
+  "s3.region": "us-east-1"
+}
