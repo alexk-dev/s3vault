@@ -12,9 +12,14 @@ import picocli.CommandLine.Parameters;
 @Command(name = "s3vault.sh", mixinStandardHelpOptions = true, synopsisSubcommandLabel = "[KEY]")
 class CommandLineHandler implements Callable<Integer> {
 
-  private final Storage storage;
-  private final Config config;
-  private final EncryptionService encryptionService;
+  private final ConfigReader configReader;
+  private Storage storage;
+  private Config config;
+  private EncryptionService encryptionService;
+
+  public CommandLineHandler(ConfigReader configReader) {
+    this.configReader = configReader;
+  }
 
   @Parameters(index = "0", description = "get, set, list")
   private Action action;
@@ -40,14 +45,11 @@ class CommandLineHandler implements Callable<Integer> {
       required = false)
   private String data;
 
-  CommandLineHandler(ConfigReader configReader) {
+  @Override
+  public Integer call() throws Exception {
     this.config = configReader.readConfig(configFile);
     this.encryptionService = new EncryptionService(config);
     this.storage = new StorageS3Service(config);
-  }
-
-  @Override
-  public Integer call() throws Exception {
 
     if (file != null && Action.set.equals(action)) {
       byte[] fileContents = Files.readAllBytes(file.toPath());
